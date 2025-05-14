@@ -1,13 +1,12 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from .models import Category, Product, Stock, Customer, Supplier, IncomingOrder
+from .models import Category, Product, Customer, Supplier, IncomingOrder, OutgoingOrder
 
 
 def home(request):
     return render(request, "home.html")
-
-
 
 
 def createcategory(request):
@@ -84,11 +83,6 @@ def removeproduct(request, id):
     return redirect("allproducts")
 
 
-def allstocks(request):
-
-    stocks = Stock.objects.all()
-    return render(request, "allstocks.html", context={"allstocks": stocks})
-
 
 def createcustomer(request):
 
@@ -162,20 +156,24 @@ def createincomingorder(request):
     suppliers = Supplier.objects.all()
 
     if request.method=="POST":
+
         supplier_name = request.POST['sname']
         product_name = request.POST['pname']
-        quantity = request.POST['quantity']
-        total_price = request.POST['price']
+        quantity = int(request.POST['quantity'])
+
 
         supplier_name = get_object_or_404(Supplier, firstName=supplier_name)
         product_name = get_object_or_404(Product, name=product_name)
 
+        total_price = quantity * product_name.unitPrice
+
         order = IncomingOrder(productId=product_name, supplierId=supplier_name, quantityToSupply=quantity,
-                              totalPrice=total_price)
+                              productPrice=product_name.unitPrice, totalPrice=total_price)
         order.save()
 
         product = order.productId
-        product.availableQuantity = IncomingOrder.objects.filter(productId=product).count()
+        product.availableQuantity = product.availableQuantity + quantity
+        product.totalPrice = product.availableQuantity * product.unitPrice
         product.save()
 
         return redirect("allincomingorders")
@@ -191,15 +189,92 @@ def createincomingorder(request):
 
 def allincomingorders(request):
 
-    orders = IncomingOrder.object.all()
+    orders = IncomingOrder.objects.all()
     return render(request, "allincomingorders.html", context={"orders": orders})
 
 
 def removeincomingorder(request, id):
     order = IncomingOrder.objects.get(pk=id)
     order.delete()
+    return redirect("allincomingorders")
+
+
+def createoutgoingorder(request):
+
+    products = Product.objects.all()
+    customers = Customer.objects.all()
+
+    if request.method == "POST":
+
+        customer_name = request.POST['cname']
+        product_name = request.POST['pname']
+        quantity = int(request.POST['quantity'])
+
+        customer_name = get_object_or_404(Customer, firstName=customer_name)
+        product_name = get_object_or_404(Product, name=product_name)
+
+        total_price_before_discount = quantity * product_name.unitPrice
+
+        discount = 0
+        total_price_after_discount =0
+
+        if product_name.availableQuantity>=quantity:
+
+            if total_price_before_discount>2000:
+                discount = 10
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount*0.1)
+
+            elif total_price_before_discount>4000:
+                discount = 15
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.15)
+
+            elif total_price_before_discount>8000:
+                discount = 20
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.2)
+
+            elif total_price_before_discount>12000:
+                discount = 25
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.25)
+
+            else:
+                discount = 30
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.3)
+
+            order = OutgoingOrder(productId=product_name, customerId=customer_name, quantityToOrder=quantity,
+                                  totalPriceBeforeDiscount=total_price_before_discount, discount=discount,
+                                  totalPriceAfterDiscount=total_price_after_discount)
+
+            order.save()
+
+            product = order.productId
+            product.availableQuantity = product.availableQuantity - quantity
+            product.totalPrice = product.availableQuantity * product.unitPrice
+            product.save()
+
+            return redirect("alloutgoingorders")
+
+        else:
+            messages.error(request, f'We do not have enough products in the stock!')
+            return render(request, "stocks.html", context={"products": products})
+
+    return render(request, "createoutgoingorder.html", context={"products":products, "customers": customers})
 
 
 
+def alloutgoingorders(request):
+
+    orders = OutgoingOrder.objects.all()
+    return render(request, "alloutgoingorders.html", context={"orders": orders})
 
 
+def removeoutgoingorder(request, id):
+    order = OutgoingOrder.objects.get(pk=id)
+    product = order.productId
+
+    product.availableQuantity = product.availableQuantity + order.quantityToOrder
+    product.totalPrice = product.availableQuantity * product.unitPrice
+
+    product.save()
+    order.delete()
+
+    return redirect("alloutgoingorders")

@@ -25,10 +25,10 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Incoming Order Form</h1>
+        <h1> Welcome To Outgoing Order Form</h1>
 
 
-        <form action="{% url 'createincomingorder' %}" method="post">
+        <form action="{% url 'createoutgoingorder' %}" method="post">
 
             {% csrf_token %}
 
@@ -49,9 +49,9 @@
 
          <div class="mb-3">
 
-               <select name="sname">
-                   {% for supplier in suppliers %}
-                   <option value="{{supplier.firstName}}">{{supplier.firstName}}</option>
+               <select name="cname">
+                   {% for customer in customers %}
+                   <option value="{{customer.firstName}}">{{customer.firstName}}</option>
 
                    {% endfor %}
 
@@ -61,7 +61,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Quantity To Supply</label>
+            <label for="exampleInputPassword1" class="form-label">Quantity To Order</label>
             <input type="text" required name="quantity"  class="form-control" id="exampleInputPassword1">
           </div>
 
@@ -70,7 +70,7 @@
         </form><br><br>
 
 
-        <a href="{% url 'allincomingorders' %}" class="btn btn-info">ALL INCOMING ORDERS</a>
+        <a href="{% url 'alloutgoingorders' %}" class="btn btn-info">ALL OUTGOING ORDERS</a>
          <a href="{% url 'allproducts' %}" class="btn btn-info">ALL PRODUCTS</a>
 
 

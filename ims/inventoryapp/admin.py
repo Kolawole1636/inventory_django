@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from .models import *
 
-list1 = [Category, Product, Stock, Customer, Supplier, IncomingOrder, OutgoingOrder]
+list1 = [Category, Product, Customer, Supplier, IncomingOrder, OutgoingOrder]
 
 
 for item in list1:

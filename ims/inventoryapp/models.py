@@ -14,6 +14,10 @@ class Category(models.Model):
         verbose_name = "Categorie"
 
 
+
+
+
+
 class Product(models.Model):
     name = models.CharField(max_length=30, null=False)
     categoryId = models.ForeignKey(Category, related_name="product", on_delete=models.CASCADE)
@@ -24,17 +28,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Stock(models.Model):
-    productId = models.ForeignKey(Product, related_name="product", on_delete=models.CASCADE)
-    availableQuantity = models.IntegerField()
-    productPrice = models.FloatField()
-    totalPrice = models.FloatField()
-    date_created = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.productId.name
 
 
 class Customer(models.Model):
@@ -76,8 +69,8 @@ class IncomingOrder(models.Model):
 
 
 class OutgoingOrder(models.Model):
-    productId = models.ManyToManyField(Product)
-    customerId = models.ManyToManyField(Customer)
+    productId = models.ForeignKey(Product, default=0, related_name="outgoingorder", on_delete=models.CASCADE)
+    customerId = models.ForeignKey(Customer, default=0, related_name="outgoingorder", on_delete=models.CASCADE)
     quantityToOrder = models.IntegerField()
     totalPriceBeforeDiscount = models.FloatField()
     discount = models.FloatField()

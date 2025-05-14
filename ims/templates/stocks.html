@@ -19,10 +19,6 @@
 <body>
 
 
-<div class="container">
-
-  <div class="row justify-content-center">
-    <div class="col-md-12">
 
 <nav class="navbar bg-dark navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
@@ -57,10 +53,23 @@
 
 <!--      </ul>-->
 
-    </div>
-  </div>
-</nav>
+<!--</nav>-->
 
+
+<div class="container">
+
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+
+        {% if messages %}
+
+        {% for message in messages %}
+
+        <h5 class="btn btn-success"> {{ message }} </h5>
+
+        {% endfor %}
+
+        {% endif %}
 
   <marquee><h1> Stock Data Page</h1></marquee>
 
@@ -70,28 +79,25 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Product Name</th>
-                <th scope="col">availableQuantity</th>
-                <th scope="col">productPrice</th>
-                <th scope="col">totalPrice</th>
-                <th scope="col">Date Created</th>
-                <th scope="col">Action</th>
+                <th scope="col">Category</th>
+                <th scope="col">Available Quantity</th>
+                <th scope="col">product Price</th>
+
             </tr>
           </thead>
 
           <tbody>
 
 
-             {% for stock in stocks %}
+             {% for product in products %}
 
             <tr>
 
-                <td>{{stock.id}}</td>
-                <td>{{stock.productId}}</td>
-                <td>{{stock.availableQuantity}}</td>
-                <td>{{stock.productPrice}}</td>
-                <td>{{stock.totalPrice}}</td>
-                <td>{{stock.date_created}}</td>
-
+                <td>{{product.id}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.categoryId}}</td>
+                <td>{{product.availableQuantity}}</td>
+                <td>{{product.unitPrice}}</td>
 
             </tr>
 
@@ -100,7 +106,7 @@
 
         </table><br><br>
 
-         <a href="{% url 'createproduct' %}" class="btn btn-info">CREATE PRODUCT</a>
+        <a href="{% url 'createoutgoingorder' %}" class="btn btn-info">CREATE OUTGOING ORDER</a>
 
 
 

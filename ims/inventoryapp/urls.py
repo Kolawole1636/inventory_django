@@ -11,7 +11,6 @@ urlpatterns = [
     path('createproduct', views.createproduct, name='createproduct'),
     path('allproducts', views.allproducts, name='allproducts'),
     path('removeproduct/<int:id>', views.removeproduct, name='removeproduct'),
-    path('allstocks', views.allstocks, name='allstocks'),
     path('createcustomer', views.createcustomer, name='createcustomer'),
     path('allcustomers', views.allcustomers, name='allcustomers'),
     path('removecustomer/<int:id>', views.removecustomer, name='removecustomer'),
@@ -21,6 +20,9 @@ urlpatterns = [
     path('createincomingorder', views.createincomingorder, name='createincomingorder'),
     path('allincomingorders', views.allincomingorders, name='allincomingorders'),
     path('removeincomingorder/<int:id>', views.removeincomingorder, name='removeincomingorder'),
+    path('createoutgoingorder', views.createoutgoingorder, name='createoutgoingorder'),
+    path('alloutgoingorders', views.alloutgoingorders, name='alloutgoingorders'),
+    path('removeoutgoingorder/<int:id>', views.removeoutgoingorder, name='removeoutgoingorder'),
 
 
 
