@@ -96,11 +96,13 @@ def searchproduct(request):
     if request.method == "POST":
         cat_name = request.POST['catname']
 
+        cat_name = get_object_or_404(Category, name=cat_name)
+
         products = Product.objects.filter(categoryId__exact=cat_name)
 
-        return render(request, 'searchcustomer.html', {"products": products})
+        return render(request, 'searchproduct.html', {"products": products, "cats": cats})
 
-    return render(request, 'searchcustomer.html', context={"cats": cats})
+    return render(request, 'searchproduct.html', context={"cats": cats})
 
 
 
@@ -214,10 +216,6 @@ def createincomingorder(request):
 
 
     return render(request, "createincomingorder.html", context={"products":products, "suppliers": suppliers})
-
-
-
-
 
 
 def allincomingorders(request):

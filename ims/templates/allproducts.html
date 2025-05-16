@@ -106,15 +106,20 @@
 
         <h2 class="btn btn-success">Total Price For All The Available Products : ${{total_price}} </h2><br>
 
-         <a href="{% url 'createproduct' %}" class="btn btn-info">CREATE PRODUCT</a>
+       <h1>
+           <a href="{% url 'createproduct' %}" class="btn btn-info">CREATE PRODUCT</a>
         <a href="{% url 'searchproduct' %}" class="btn btn-info">SEARCH PRODUCT</a>
         <a href="{% url 'allincomingorders' %}" class="btn btn-info">ALL INCOMING ORDERS</a>
         <a href="{% url 'alloutgoingorders' %}" class="btn btn-info">ALL OUTGOING ORDERS</a>
-        <a href="{% url 'allcat' %}" class="btn btn-info">ALL CATEGORIES</a>
+       </h1>
+
+       <h1>  <a href="{% url 'allcat' %}" class="btn btn-info">ALL CATEGORIES</a>
          <a href="{% url 'allcustomers' %}" class="btn btn-info">ALL CUSTOMERS</a>
          <a href="{% url 'allsuppliers' %}" class="btn btn-info">ALL SUPPLIERS</a>
+       </h1>
 
 
+        <br><br>
 
 
 
