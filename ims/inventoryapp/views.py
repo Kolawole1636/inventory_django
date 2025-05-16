@@ -71,7 +71,12 @@ def allproducts(request):
 
     products = Product.objects.all()
 
-    return render(request, "allproducts.html", context={"allproducts": products})
+    total_price_for_all = 0
+
+    for product in products:
+        total_price_for_all += product.totalPrice
+
+    return render(request, "allproducts.html", context={"allproducts": products, "total_price":total_price_for_all})
 
 
 def removeproduct(request, id):
@@ -81,6 +86,21 @@ def removeproduct(request, id):
     product.delete()
 
     return redirect("allproducts")
+
+
+
+def searchproduct(request):
+
+    cats = Category.objects.all()
+
+    if request.method == "POST":
+        cat_name = request.POST['catname']
+
+        products = Product.objects.filter(categoryId__exact=cat_name)
+
+        return render(request, 'searchcustomer.html', {"products": products})
+
+    return render(request, 'searchcustomer.html', context={"cats": cats})
 
 
 
@@ -116,6 +136,19 @@ def removecustomer(request, id):
     customer = Customer.objects.get(pk=id)
     customer.delete()
     return redirect("allcustomers")
+
+
+
+def searchcustomer(request):
+
+    if request.method == "POST":
+        customer_name = request.POST['cname']
+
+        customers = Customer.objects.filter(firstName__icontains=customer_name)
+
+        return render(request, 'searchcustomer.html', {"customers": customers})
+
+    return render(request, 'searchcustomer.html')
 
 
 
@@ -218,21 +251,25 @@ def createoutgoingorder(request):
         discount = 0
         total_price_after_discount =0
 
-        if product_name.availableQuantity>=quantity:
+        if product_name.availableQuantity >= quantity:
 
-            if total_price_before_discount>2000:
+            if total_price_before_discount < 2000:
+                discount = 0
+                total_price_after_discount = total_price_before_discount
+
+            elif 2000 < total_price_before_discount < 4000:
                 discount = 10
                 total_price_after_discount = total_price_before_discount - (total_price_before_discount*0.1)
 
-            elif total_price_before_discount>4000:
+            elif 4000 < total_price_before_discount < 8000:
                 discount = 15
                 total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.15)
 
-            elif total_price_before_discount>8000:
+            elif 8000 < total_price_before_discount < 12000:
                 discount = 20
                 total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.2)
 
-            elif total_price_before_discount>12000:
+            elif 12000 < total_price_before_discount < 15000:
                 discount = 25
                 total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.25)
 
@@ -278,3 +315,21 @@ def removeoutgoingorder(request, id):
     order.delete()
 
     return redirect("alloutgoingorders")
+
+
+def searchorder(request):
+
+    if request.method == "POST":
+        date1 = request.POST['date1']
+        date2 = request.POST['date2']
+
+        orders = OutgoingOrder.objects.filter(OrderDate__range=[date1, date2])
+
+        total_price_for_all = 0
+
+        for order in orders:
+            total_price_for_all += order.totalPriceAfterDiscount
+
+        return render(request, 'searchorder.html', {"orders": orders, "total_price":total_price_for_all})
+
+    return render(request, 'searchorder.html')

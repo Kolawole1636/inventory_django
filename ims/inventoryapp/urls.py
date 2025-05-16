@@ -23,6 +23,9 @@ urlpatterns = [
     path('createoutgoingorder', views.createoutgoingorder, name='createoutgoingorder'),
     path('alloutgoingorders', views.alloutgoingorders, name='alloutgoingorders'),
     path('removeoutgoingorder/<int:id>', views.removeoutgoingorder, name='removeoutgoingorder'),
+    path("searchorder", views.searchorder, name="searchorder"),
+    path("searchcustomer", views.searchcustomer, name="searchcustomer"),
+    path("searchproduct", views.searchproduct, name="searchproduct"),
 
 
 
