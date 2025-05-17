@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -119,6 +120,21 @@ def createcustomer(request):
         customer = Customer(firstName=fname, lastName=lname, age=age, email=email, phoneNumber=number, address=address)
         customer.save()
 
+        subject = f'Welcome To SoftCode Store  {customer.firstName}, thanks for choosing us'
+        message = f'Your Id is C2025{customer.id} \n ' \
+                  f'You can always check our store and order for anything you are interested in' \
+                  f'We are always available to give you the best.'
+
+        recipient_list = [customer.email]  # Replace with recipient email(s)
+
+        send_mail(
+            subject,
+            message,
+            'rilelaboye@gmail.com',  # From email (matches EMAIL_HOST_USER)
+            recipient_list,
+            fail_silently=False,  # Raise error if sending fails
+        )
+
         return redirect("allcustomers")
 
     else:
@@ -164,8 +180,8 @@ def createsupplier(request):
         number = request.POST['number']
         address = request.POST['address']
 
-        customer = Customer(firstName=fname, lastName=lname, age=age, email=email, phoneNumber=number, address=address)
-        customer.save()
+        supplier = Supplier(firstName=fname, lastName=lname, age=age, email=email, phoneNumber=number, address=address)
+        supplier.save()
 
         return redirect("allsuppliers")
 
@@ -278,8 +294,22 @@ def createoutgoingorder(request):
             order = OutgoingOrder(productId=product_name, customerId=customer_name, quantityToOrder=quantity,
                                   totalPriceBeforeDiscount=total_price_before_discount, discount=discount,
                                   totalPriceAfterDiscount=total_price_after_discount)
-
             order.save()
+
+            subject = f' SoftCode Store: Welcome back {customer_name.firstName}'
+            message = f'You ordered {quantity} quantities of {product_name.name}\n ' \
+                      f'The total price is ${order.totalPriceAfterDiscount} \n' \
+                      f'Thank you for patronising us.'
+
+            recipient_list = [customer_name.email]  # Replace with recipient email(s)
+
+            send_mail(
+                subject,
+                message,
+                'rilelaboye@gmail.com',  # (matches EMAIL_HOST_USER)
+                recipient_list,
+                fail_silently=False,  # Raise error if sending fails
+            )
 
             product = order.productId
             product.availableQuantity = product.availableQuantity - quantity
