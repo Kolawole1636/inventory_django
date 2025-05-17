@@ -117,12 +117,14 @@ def createcustomer(request):
         number = request.POST['number']
         address = request.POST['address']
 
+
         customer = Customer(firstName=fname, lastName=lname, age=age, email=email, phoneNumber=number, address=address)
         customer.save()
 
-        subject = f'Welcome To SoftCode Store  {customer.firstName}, thanks for choosing us'
-        message = f'Your Id is C2025{customer.id} \n ' \
-                  f'You can always check our store and order for anything you are interested in' \
+        subject = f'Welcome Message'
+        message = f'Welcome To SoftCode Store  {customer.firstName}, thanks for choosing us\n'\
+                  f'Your Id is C2025{customer.id} \n'\
+                  f'You can always check our store and order for anything you are interested in \n' \
                   f'We are always available to give you the best.'
 
         recipient_list = [customer.email]  # Replace with recipient email(s)
@@ -296,8 +298,9 @@ def createoutgoingorder(request):
                                   totalPriceAfterDiscount=total_price_after_discount)
             order.save()
 
-            subject = f' SoftCode Store: Welcome back {customer_name.firstName}'
-            message = f'You ordered {quantity} quantities of {product_name.name}\n ' \
+            subject = f' Order Message '
+            message = f'SoftCode Store: Welcome back {customer_name.firstName}\n' \
+                      f'You ordered {quantity} quantities of {product_name.name}\n '\
                       f'The total price is ${order.totalPriceAfterDiscount} \n' \
                       f'Thank you for patronising us.'
 
@@ -323,7 +326,6 @@ def createoutgoingorder(request):
             return render(request, "stocks.html", context={"products": products})
 
     return render(request, "createoutgoingorder.html", context={"products":products, "customers": customers})
-
 
 
 def alloutgoingorders(request):
