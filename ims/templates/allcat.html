@@ -86,7 +86,7 @@
                 <td>{{cat.description}}</td>
 
                 <td><a href="{% url 'removecat' cat.id %}" class="btn btn-danger">DELETE</a>
-                    <a href="#" class="btn btn-info">EDIT</a>
+                    <a href="{% url 'updatecat' cat.id %}" class="btn btn-info">EDIT</a>
                 </td>
 
             </tr>

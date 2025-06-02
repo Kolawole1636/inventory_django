@@ -96,7 +96,7 @@
                 <td>{{supplier.date_created}}</td>
 
                 <td><a href="{% url 'removesupplier' supplier.id %}" class="btn btn-danger">DELETE</a>
-                    <a href="#" class="btn btn-info">EDIT</a>
+                    <a href="{% url 'updatesupplier' supplier.id %}" class="btn btn-info">EDIT</a>
                 </td>
 
             </tr>

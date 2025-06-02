@@ -11,7 +11,6 @@ def home(request):
 
 
 def createcategory(request):
-
     if request.method == "POST":
         name = request.POST['name']
         desc = request.POST['desc']
@@ -26,23 +25,32 @@ def createcategory(request):
 
 
 def allcategory(request):
-
     all_cat = Category.objects.all()
-    return render(request, "allcat.html", context={"all_cats":all_cat})
+    return render(request, "allcat.html", context={"all_cats": all_cat})
 
+
+def updatecategory(request, id):
+    cat = Category.objects.get(pk=id)
+    if request.method == "POST":
+        name = request.POST['name']
+        desc = request.POST['desc']
+
+        cat.name = name
+        cat.description = desc
+        cat.save()
+        return redirect("allcat")
+
+    else:
+        return render(request, "editcat.html", context={"cat": cat})
 
 
 def removecat(request, id):
-
     cat = Category.objects.get(pk=id)
     cat.delete()
     return redirect("allcat")
 
 
-
-
 def createproduct(request):
-
     cats = Category.objects.all()
 
     if request.method == "POST":
@@ -65,11 +73,10 @@ def createproduct(request):
             return redirect("allproducts")
 
     else:
-        return render(request, "createproduct.html", context={"allcats":cats})
+        return render(request, "createproduct.html", context={"allcats": cats})
 
 
 def allproducts(request):
-
     products = Product.objects.all()
 
     total_price_for_all = 0
@@ -77,11 +84,37 @@ def allproducts(request):
     for product in products:
         total_price_for_all += product.totalPrice
 
-    return render(request, "allproducts.html", context={"allproducts": products, "total_price":total_price_for_all})
+    return render(request, "allproducts.html", context={"allproducts": products, "total_price": total_price_for_all})
+
+
+def updateproduct(request, id):
+    product = Product.objects.get(pk=id)
+    cats = Category.objects.all()
+
+    if request.method == "POST":
+        name = request.POST['name']
+        available_quantity = product.availableQuantity
+        unit_price = float(request.POST['price'])
+        total_price = available_quantity * unit_price
+        cat = request.POST['cat']
+
+        cat = get_object_or_404(Category, name=cat)
+
+        product.name = name
+        product.availableQuantity = available_quantity
+        product.unitPrice = unit_price
+        product.totalPrice = total_price
+        product.categoryId = cat
+
+        product.save()
+
+        return redirect("allproducts")
+
+    else:
+        return render(request, "editproduct.html", context={"product": product, "cats": cats})
 
 
 def removeproduct(request, id):
-
     product = Product.objects.get(pk=id)
 
     product.delete()
@@ -89,9 +122,7 @@ def removeproduct(request, id):
     return redirect("allproducts")
 
 
-
 def searchproduct(request):
-
     cats = Category.objects.all()
 
     if request.method == "POST":
@@ -106,9 +137,7 @@ def searchproduct(request):
     return render(request, 'searchproduct.html', context={"cats": cats})
 
 
-
 def createcustomer(request):
-
     if request.method == "POST":
         fname = request.POST['fname']
         lname = request.POST['lname']
@@ -117,13 +146,12 @@ def createcustomer(request):
         number = request.POST['number']
         address = request.POST['address']
 
-
         customer = Customer(firstName=fname, lastName=lname, age=age, email=email, phoneNumber=number, address=address)
         customer.save()
 
         subject = f'Welcome Message'
-        message = f'Welcome To SoftCode Store  {customer.firstName}, thanks for choosing us\n'\
-                  f'Your Id is C2025{customer.id} \n'\
+        message = f'Welcome To SoftCode Store  {customer.firstName}, thanks for choosing us\n' \
+                  f'Your Id is C2025{customer.id} \n' \
                   f'You can always check our store and order for anything you are interested in \n' \
                   f'We are always available to give you the best.'
 
@@ -143,24 +171,43 @@ def createcustomer(request):
         return render(request, "createcustomer.html")
 
 
-
-
-
 def allcustomers(request):
     customers = Customer.objects.all()
-    return render(request, "allcustomers.html", context={"customers":customers})
+    return render(request, "allcustomers.html", context={"customers": customers})
+
+
+def updatecustomer(request, id):
+    customer = Customer.objects.get(pk=id)
+
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        age = request.POST['age']
+        email = request.POST['email']
+        number = request.POST['number']
+        address = request.POST['address']
+
+        customer.firstName = fname
+        customer.lastName = lname
+        customer.age = age
+        customer.email = email
+        customer.phoneNumber = number
+        customer.address = address
+
+        customer.save()
+        return redirect("allcustomers")
+
+    else:
+        return render(request, "editcustomer.html", context={"customer": customer})
 
 
 def removecustomer(request, id):
-
     customer = Customer.objects.get(pk=id)
     customer.delete()
     return redirect("allcustomers")
 
 
-
 def searchcustomer(request):
-
     if request.method == "POST":
         customer_name = request.POST['cname']
 
@@ -169,8 +216,6 @@ def searchcustomer(request):
         return render(request, 'searchcustomer.html', {"customers": customers})
 
     return render(request, 'searchcustomer.html')
-
-
 
 
 def createsupplier(request):
@@ -196,24 +241,45 @@ def allsuppliers(request):
     return render(request, "allsuppliers.html", context={"suppliers": suppliers})
 
 
+def updatesupplier(request, id):
+    supplier = Supplier.objects.get(pk=id)
+
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        age = request.POST['age']
+        email = request.POST['email']
+        number = request.POST['number']
+        address = request.POST['address']
+
+        supplier.firstName = fname
+        supplier.lastName = lname
+        supplier.age = age
+        supplier.email = email
+        supplier.phoneNumber = number
+        supplier.address = address
+
+        supplier.save()
+        return redirect("allsuppliers")
+
+    else:
+        return render(request, "editsupplier.html", context={"supplier": supplier})
+
+
 def removesupplier(request, id):
     supplier = Supplier.objects.get(pk=id)
     supplier.delete()
     return redirect("allsuppliers")
 
 
-
 def createincomingorder(request):
-
     products = Product.objects.all()
     suppliers = Supplier.objects.all()
 
-    if request.method=="POST":
-
+    if request.method == "POST":
         supplier_name = request.POST['sname']
         product_name = request.POST['pname']
         quantity = int(request.POST['quantity'])
-
 
         supplier_name = get_object_or_404(Supplier, firstName=supplier_name)
         product_name = get_object_or_404(Product, name=product_name)
@@ -231,16 +297,50 @@ def createincomingorder(request):
 
         return redirect("allincomingorders")
 
-
-
-    return render(request, "createincomingorder.html", context={"products":products, "suppliers": suppliers})
+    return render(request, "createincomingorder.html", context={"products": products, "suppliers": suppliers})
 
 
 def allincomingorders(request):
-
     orders = IncomingOrder.objects.all()
     return render(request, "allincomingorders.html", context={"orders": orders})
 
+
+def updateincomingorder(request, id):
+
+    order = IncomingOrder.objects.get(pk=id)
+    product = order.productId
+    supplier = order.supplierId
+    products = Product.objects.all()
+    suppliers = Supplier.objects.all()
+
+    if request.method == "POST":
+        supplier_name = request.POST['sname']
+        product_name = request.POST['pname']
+        quantity = int(request.POST['quantity'])
+
+        supplier_name = get_object_or_404(Supplier, firstName=supplier_name)
+        product_name = get_object_or_404(Product, name=product_name)
+
+        product_name.availableQuantity = product_name.availableQuantity - order.quantityToSupply
+        product_name.save()
+
+        order.totalPrice = quantity * product_name.unitPrice
+
+        order.productId = product_name
+        order.supplierId = supplier_name
+        order.quantityToSupply = quantity
+
+        order.save()
+
+        product_name.availableQuantity = product_name.availableQuantity + quantity
+        product_name.totalPrice = product_name.availableQuantity * product_name.unitPrice
+        product_name.save()
+
+        return redirect("allincomingorders")
+
+    return render(request, "editincomingorder.html", context={"order": order, "supplier": supplier,
+                                                              "product": product, "products": products,
+                                                              "suppliers": suppliers})
 
 def removeincomingorder(request, id):
     order = IncomingOrder.objects.get(pk=id)
@@ -249,7 +349,6 @@ def removeincomingorder(request, id):
 
 
 def createoutgoingorder(request):
-
     products = Product.objects.all()
     customers = Customer.objects.all()
 
@@ -265,7 +364,7 @@ def createoutgoingorder(request):
         total_price_before_discount = quantity * product_name.unitPrice
 
         discount = 0
-        total_price_after_discount =0
+        total_price_after_discount = 0
 
         if product_name.availableQuantity >= quantity:
 
@@ -275,7 +374,7 @@ def createoutgoingorder(request):
 
             elif 2000 < total_price_before_discount < 4000:
                 discount = 10
-                total_price_after_discount = total_price_before_discount - (total_price_before_discount*0.1)
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.1)
 
             elif 4000 < total_price_before_discount < 8000:
                 discount = 15
@@ -300,7 +399,7 @@ def createoutgoingorder(request):
 
             subject = f' Order Message '
             message = f'SoftCode Store: Welcome back {customer_name.firstName}\n' \
-                      f'You ordered {quantity} quantities of {product_name.name}\n '\
+                      f'You ordered {quantity} quantities of {product_name.name}\n ' \
                       f'The total price is ${order.totalPriceAfterDiscount} \n' \
                       f'Thank you for patronising us.'
 
@@ -322,16 +421,91 @@ def createoutgoingorder(request):
             return redirect("alloutgoingorders")
 
         else:
-            messages.error(request, f'We do not have enough products in the stock!')
+            messages.error(request, f'We do not have enough products in the stock! Check the available products below')
             return render(request, "stocks.html", context={"products": products})
 
-    return render(request, "createoutgoingorder.html", context={"products":products, "customers": customers})
+    return render(request, "createoutgoingorder.html", context={"products": products, "customers": customers})
 
 
 def alloutgoingorders(request):
-
     orders = OutgoingOrder.objects.all()
     return render(request, "alloutgoingorders.html", context={"orders": orders})
+
+
+def updateoutgoingorder(request, id):
+
+    order = OutgoingOrder.objects.get(pk=id)
+    product = order.productId
+    customer = order.customerId
+    products = Product.objects.all()
+    customers = Customer.objects.all()
+
+    if request.method == "POST":
+
+        customer_name = request.POST['cname']
+        product_name = request.POST['pname']
+        quantity = int(request.POST['quantity'])
+
+        customer_name = get_object_or_404(Customer, firstName=customer_name)
+        product_name = get_object_or_404(Product, name=product_name)
+
+        product_name.availableQuantity = product_name.availableQuantity + order.quantityToOrder
+        product_name.save()
+
+        total_price_before_discount = quantity * product_name.unitPrice
+
+        discount = 0
+        total_price_after_discount = 0
+
+        if product_name.availableQuantity >= quantity:
+
+            if total_price_before_discount < 2000:
+                discount = 0
+                total_price_after_discount = total_price_before_discount
+
+            elif 2000 < total_price_before_discount < 4000:
+                discount = 10
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.1)
+
+            elif 4000 < total_price_before_discount < 8000:
+                discount = 15
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.15)
+
+            elif 8000 < total_price_before_discount < 12000:
+                discount = 20
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.2)
+
+            elif 12000 < total_price_before_discount < 15000:
+                discount = 25
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.25)
+
+            else:
+                discount = 30
+                total_price_after_discount = total_price_before_discount - (total_price_before_discount * 0.3)
+
+            order.productId = product_name
+            order.customerId = customer_name
+            order.quantityToOrder = quantity
+            order.totalPriceBeforeDiscount = total_price_before_discount
+            order.discount = discount
+            order.totalPriceAfterDiscount = total_price_after_discount
+
+            order.save()
+
+            product_name.availableQuantity = product_name.availableQuantity - quantity
+            product_name.totalPrice = product_name.availableQuantity * product_name.unitPrice
+            product_name.save()
+
+            return redirect("alloutgoingorders")
+
+        else:
+            messages.error(request, f'We do not have enough products in the stock! Check the available products below')
+            return render(request, "stocks.html", context={"products": products})
+
+    else:
+        return render(request, "editoutgoingorder.html", context={"order": order,  "products": products,
+                                                                  "customers": customers, "product": product,
+                                                                  "customer": customer})
 
 
 def removeoutgoingorder(request, id):
@@ -348,7 +522,6 @@ def removeoutgoingorder(request, id):
 
 
 def searchorder(request):
-
     if request.method == "POST":
         date1 = request.POST['date1']
         date2 = request.POST['date2']
@@ -360,6 +533,6 @@ def searchorder(request):
         for order in orders:
             total_price_for_all += order.totalPriceAfterDiscount
 
-        return render(request, 'searchorder.html', {"orders": orders, "total_price":total_price_for_all})
+        return render(request, 'searchorder.html', {"orders": orders, "total_price": total_price_for_all})
 
     return render(request, 'searchorder.html')

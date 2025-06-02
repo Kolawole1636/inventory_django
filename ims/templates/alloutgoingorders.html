@@ -96,7 +96,7 @@
                 <td>{{order.OrderDate}}</td>
 
                 <td><a href="{% url 'removeoutgoingorder' order.id %}" class="btn btn-danger">DELETE</a>
-                    <a href="#" class="btn btn-info">EDIT</a>
+                    <a href="{% url 'updateoutgoingorder' order.id %}" class="btn btn-info">EDIT</a>
                 </td>
 
             </tr>
