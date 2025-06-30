@@ -25,7 +25,7 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Customer Form</h1>
+        <h1> Page To Update Supplier </h1>
 
 
         <form action="{% url 'updatesupplier' supplier.id %}" method="post">
@@ -44,22 +44,22 @@
 
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Age</label>
-            <input type="text" required name="age" value="{{supplier.age}}"  class="form-control" id="">
+            <input type="number" required name="age" value="{{supplier.age}}"  class="form-control" id="">
           </div>
 
             <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Email</label>
-            <input type="email" name="email" value="{{supplier.email}}" class="form-control" id="exampleInputPassword1">
+            <input type="email" required name="email" value="{{supplier.email}}" class="form-control" id="exampleInputPassword1">
           </div>
 
             <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Phone Number</label>
-            <input type="text" name="number" value="{{supplier.phoneNumber}}" class="form-control" id="exampleInputPassword">
+            <input type="number" required name="number" value="{{supplier.phoneNumber}}" class="form-control" id="exampleInputPassword">
           </div>
 
              <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">City Address</label>
-            <input type="text" name="address" value="{{supplier.address}}" class="form-control" id="exampleInputPassword2">
+            <input type="text" required name="address" value="{{supplier.address}}" class="form-control" id="exampleInputPassword2">
           </div>
 
 

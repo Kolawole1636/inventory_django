@@ -14,10 +14,6 @@ class Category(models.Model):
         verbose_name = "Categorie"
 
 
-
-
-
-
 class Product(models.Model):
     name = models.CharField(max_length=30, null=False)
     categoryId = models.ForeignKey(Category, related_name="product", on_delete=models.CASCADE)

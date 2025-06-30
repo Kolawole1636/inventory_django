@@ -36,7 +36,7 @@
 
                <select name="pname">
                    {% for product in products %}
-                   <option value="{{product.name}}">{{product.name}}</option>
+                   <option>{{product.name}}</option>
 
                    {% endfor %}
 
@@ -51,7 +51,7 @@
 
                <select name="sname">
                    {% for supplier in suppliers %}
-                   <option value="{{supplier.firstName}}">{{supplier.firstName}}</option>
+                   <option>{{supplier.firstName}}</option>
 
                    {% endfor %}
 
@@ -62,7 +62,7 @@
 
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Quantity To Supply</label>
-            <input type="text" required name="quantity"  class="form-control" id="exampleInputPassword1">
+            <input type="number" required name="quantity"  class="form-control" id="exampleInputPassword1">
           </div>
 
 

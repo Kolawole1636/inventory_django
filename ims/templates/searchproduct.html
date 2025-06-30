@@ -36,8 +36,9 @@
             <div class="mb-3">
 
                <select name="catname">
+
                    {% for cat in cats %}
-                   <option value="{{cat.name}}">{{cat.name}}</option>
+                   <option>{{cat.name}}</option>
 
                    {% endfor %}
 

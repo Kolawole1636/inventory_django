@@ -25,7 +25,7 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Customer Form</h1>
+        <h1> Page To Update Customer</h1>
 
 
         <form action="{% url 'updatecustomer' customer.id %}" method="post">
@@ -44,27 +44,27 @@
 
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Age</label>
-            <input type="text" required name="age" value="{{customer.age}}"  class="form-control" id="">
+            <input type="number" required name="age" value="{{customer.age}}"  class="form-control" id="">
           </div>
 
             <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Email</label>
-            <input type="email" name="email" value="{{customer.email}}" class="form-control" id="exampleInputPassword1">
+            <input type="email" required name="email" value="{{customer.email}}" class="form-control" id="exampleInputPassword1">
           </div>
 
             <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Phone Number</label>
-            <input type="text" name="number" value="{{customer.phoneNumber}}" class="form-control" id="exampleInputPassword">
+            <input type="number" required name="number" value="{{customer.phoneNumber}}" class="form-control" id="exampleInputPassword">
           </div>
 
              <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">City Address</label>
-            <input type="text" name="address" value="{{customer.address}}" class="form-control" id="exampleInputPassword2">
+            <input type="text" required name="address" value="{{customer.address}}" class="form-control" id="exampleInputPassword2">
           </div>
 
 
 
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">UPDATE</button>
         </form><br>
 
 

@@ -25,7 +25,7 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Outgoing Order Form</h1>
+        <h1> Update Outgoing Order Page</h1>
 
 
         <form action="{% url 'updateoutgoingorder' order.id %}" method="post">
@@ -36,7 +36,7 @@
 
                <select name="pname">
 
-                   <option value="{{product.name}}">{{product.name}}</option>
+                   <option>{{product.name}}</option>
 
                </select>
 
@@ -51,7 +51,7 @@
                    <option selected value="{{customer.firstName}}">{{customer.firstName}}</option>
 
                    {% for c in customers %}
-                   <option value="{{c.firstName}}">{{c.firstName}}</option>
+                   <option>{{c.firstName}}</option>
 
                    {% endfor %}
 
@@ -62,7 +62,7 @@
 
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Quantity To Order</label>
-            <input type="text" required name="quantity" value="{{order.quantityToOrder}}" class="form-control" id="exampleInputPassword1">
+            <input type="number" required name="quantity" value="{{order.quantityToOrder}}" class="form-control" id="exampleInputPassword1">
           </div>
 
 

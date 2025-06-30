@@ -24,12 +24,12 @@
   <div class="row justify-content-center">
     <div class="col-md-20">
 
-<nav class="navbar bg-dark navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+<!--<nav class="navbar bg-dark navbar-expand-lg bg-body-tertiary">-->
+<!--  <div class="container-fluid">-->
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--      <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
 
 <!--      <ul class="navbar-nav">-->
 
@@ -57,10 +57,23 @@
 
 <!--      </ul>-->
 
-    </div>
-  </div>
-</nav>
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
 
+
+
+        {% if messages %}
+
+        {% for message in messages %}
+
+        <h5 class="btn btn-success"> {{ message }} </h5>
+        <a href="{% url 'removeoutgoingorder' myorder.id %}" class="btn btn-danger">YES</a>
+        <a href="{% url 'alloutgoingorders'%}" class="btn btn-info">NO</a>
+
+        {% endfor %}
+
+        {% endif %}
 
   <marquee><h1> Outgoing Order Data Page</h1></marquee>
 
@@ -95,7 +108,7 @@
                 <td>{{order.totalPriceAfterDiscount}}</td>
                 <td>{{order.OrderDate}}</td>
 
-                <td><a href="{% url 'removeoutgoingorder' order.id %}" class="btn btn-danger">DELETE</a>
+                <td><a href="{% url 'confirmremoveoutgoingorder' order.id %}" class="btn btn-danger">CANCEL</a>
                     <a href="{% url 'updateoutgoingorder' order.id %}" class="btn btn-info">EDIT</a>
                 </td>
 

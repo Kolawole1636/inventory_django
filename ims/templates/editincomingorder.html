@@ -25,7 +25,7 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Edit Incoming Order Form</h1>
+        <h1> Welcome To Edit Incoming Order Page</h1>
 
 
         <form action="{% url 'updateincomingorder' order.id %}" method="post">
@@ -36,7 +36,7 @@
 
                <select name="pname">
 
-                    <option selected value="{{product.name}}">{{product.name}}</option>
+                    <option selected >{{product.name}}</option>
 
                </select>
 
@@ -47,10 +47,10 @@
          <div class="mb-3">
 
                <select name="sname">
-                   <option selected value="{{supplier.firstName}}">{{supplier.firstName}}</option>
+                   <option selected >{{supplier.firstName}}</option>
 
                    {% for s in suppliers %}
-                   <option value="{{s.firstName}}">{{s.firstName}}</option>
+                   <option >{{s.firstName}}</option>
 
                    {% endfor %}
 
@@ -61,7 +61,7 @@
 
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Quantity To Supply</label>
-            <input type="text" required name="quantity" value="{{order.quantityToSupply}}"  class="form-control" id="exampleInputPassword1">
+            <input type="number" required name="quantity" value="{{order.quantityToSupply}}"  class="form-control" id="exampleInputPassword1">
           </div>
 
 

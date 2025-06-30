@@ -4,7 +4,7 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
-    path('', views.home, name ='home'),
+    path('', views.home, name='home'),
 
     path('createcat', views.createcategory, name='createcategory'),
     path('allcat', views.allcategory, name='allcat'),
@@ -36,6 +36,7 @@ urlpatterns = [
     path('createoutgoingorder', views.createoutgoingorder, name='createoutgoingorder'),
     path('alloutgoingorders', views.alloutgoingorders, name='alloutgoingorders'),
     path('updateoutgoingorder/<int:id>', views.updateoutgoingorder, name='updateoutgoingorder'),
+    path('confirmremoveoutgoingorder/<int:id>', views.confirmremoveoutgoingorder, name='confirmremoveoutgoingorder'),
     path('removeoutgoingorder/<int:id>', views.removeoutgoingorder, name='removeoutgoingorder'),
     path("searchorder", views.searchorder, name="searchorder"),
 

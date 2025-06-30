@@ -25,7 +25,7 @@
     <div class="col-md-6">
 
 
-        <h1> Welcome To Category page</h1>
+        <h1> Page To Update Product </h1>
 
 
         <form action="{% url 'updateproduct' product.id %}" method="post">
@@ -40,7 +40,7 @@
 
             <div class="mb-3">
             <label for="exampleInputPassword2" class="form-label">Price</label>
-            <input type="text" required name="price" value="{{product.unitPrice}}"  class="form-control" id="exampleInputPassword2">
+            <input type="number" required name="price" value="{{product.unitPrice}}"  class="form-control" id="exampleInputPassword2">
           </div>
 
 

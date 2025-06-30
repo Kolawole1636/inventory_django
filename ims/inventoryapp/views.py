@@ -25,6 +25,7 @@ def createcategory(request):
 
 
 def allcategory(request):
+
     all_cat = Category.objects.all()
     return render(request, "allcat.html", context={"all_cats": all_cat})
 
@@ -32,11 +33,9 @@ def allcategory(request):
 def updatecategory(request, id):
     cat = Category.objects.get(pk=id)
     if request.method == "POST":
-        name = request.POST['name']
-        desc = request.POST['desc']
+        cat.name = request.POST['name']
+        cat.description = request.POST['desc']
 
-        cat.name = name
-        cat.description = desc
         cat.save()
         return redirect("allcat")
 
@@ -45,8 +44,8 @@ def updatecategory(request, id):
 
 
 def removecat(request, id):
-    cat = Category.objects.get(pk=id)
-    cat.delete()
+
+    Category.objects.get(pk=id).delete()
     return redirect("allcat")
 
 
@@ -126,6 +125,7 @@ def searchproduct(request):
     cats = Category.objects.all()
 
     if request.method == "POST":
+
         cat_name = request.POST['catname']
 
         cat_name = get_object_or_404(Category, name=cat_name)
@@ -208,7 +208,9 @@ def removecustomer(request, id):
 
 
 def searchcustomer(request):
+
     if request.method == "POST":
+
         customer_name = request.POST['cname']
 
         customers = Customer.objects.filter(firstName__icontains=customer_name)
@@ -273,6 +275,7 @@ def removesupplier(request, id):
 
 
 def createincomingorder(request):
+
     products = Product.objects.all()
     suppliers = Supplier.objects.all()
 
@@ -310,13 +313,12 @@ def updateincomingorder(request, id):
     order = IncomingOrder.objects.get(pk=id)
     product = order.productId
     supplier = order.supplierId
-    products = Product.objects.all()
     suppliers = Supplier.objects.all()
 
     if request.method == "POST":
-        supplier_name = request.POST['sname']
-        product_name = request.POST['pname']
-        quantity = int(request.POST['quantity'])
+        supplier_name = request.POST['sname']  # ola
+        product_name = request.POST['pname']  # coke
+        quantity = int(request.POST['quantity']) # 12
 
         supplier_name = get_object_or_404(Supplier, firstName=supplier_name)
         product_name = get_object_or_404(Product, name=product_name)
@@ -339,29 +341,35 @@ def updateincomingorder(request, id):
         return redirect("allincomingorders")
 
     return render(request, "editincomingorder.html", context={"order": order, "supplier": supplier,
-                                                              "product": product, "products": products,
-                                                              "suppliers": suppliers})
+                                                              "product": product, "suppliers": suppliers})
 
 def removeincomingorder(request, id):
     order = IncomingOrder.objects.get(pk=id)
+
+    product_name = order.productId
+
+    product_name.availableQuantity = product_name.availableQuantity - order.quantityToSupply
+    product_name.save()
+
     order.delete()
     return redirect("allincomingorders")
 
 
 def createoutgoingorder(request):
+
     products = Product.objects.all()
     customers = Customer.objects.all()
 
     if request.method == "POST":
 
-        customer_name = request.POST['cname']
-        product_name = request.POST['pname']
-        quantity = int(request.POST['quantity'])
+        customer_name = request.POST['cname'] #ola
+        product_name = request.POST['pname']  # coke
+        quantity = int(request.POST['quantity']) # 10
 
         customer_name = get_object_or_404(Customer, firstName=customer_name)
         product_name = get_object_or_404(Product, name=product_name)
 
-        total_price_before_discount = quantity * product_name.unitPrice
+        total_price_before_discount = quantity * product_name.unitPrice  # 5000
 
         discount = 0
         total_price_after_discount = 0
@@ -452,6 +460,20 @@ def updateoutgoingorder(request, id):
         product_name.availableQuantity = product_name.availableQuantity + order.quantityToOrder
         product_name.save()
 
+
+        """
+        
+        aq = 20  (8)   -> 8+12 = 20
+        
+        oq = 12 (11)
+        
+        aq = 20
+        
+        or = 20 -11 = 9
+        
+        
+        """
+
         total_price_before_discount = quantity * product_name.unitPrice
 
         discount = 0
@@ -506,6 +528,16 @@ def updateoutgoingorder(request, id):
         return render(request, "editoutgoingorder.html", context={"order": order,  "products": products,
                                                                   "customers": customers, "product": product,
                                                                   "customer": customer})
+
+
+def confirmremoveoutgoingorder(request, id):
+
+    my_order = OutgoingOrder.objects.get(pk=id)
+    product = my_order.productId
+
+    messages.error(request, f'Are you sure you want to cancel this order ?')
+
+    return render(request, "alloutgoingorders.html", context={"myorder": my_order})
 
 
 def removeoutgoingorder(request, id):
